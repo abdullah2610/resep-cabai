@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,700;9..144,900&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --forest:     #0f2318;
+  --forest-mid: #1a3a26;
+  --forest-ui:  #243d2e;
+  --forest-rim: #2d5038;
+  --lime:       #a8e063;
+  --lime-bright:#c5f135;
+  --lime-dim:   #6da832;
+  --amber:      #f5a623;
+  --danger:     #e84040;
+  --cream:      #f7f3ea;
+  --cream-dim:  #ede8da;
+  --ink:        #1a1a14;
+  --ink-mid:    #3a3a2e;
+  --ink-dim:    #6b6b58;
+  --white:      #ffffff;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono:    'DM Mono', 'Courier New', monospace;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--forest);
+  color: var(--cream);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 { font-family: var(--font-display); }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--forest); }
+::-webkit-scrollbar-thumb { background: var(--forest-rim); border-radius: 3px; }
+
+.font-display { font-family: var(--font-display); }
+.font-mono    { font-family: var(--font-mono); }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.anim-slide-up { animation: slideUp 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade-in  { animation: fadeIn 0.25s ease both; }
+.anim-delay-1  { animation-delay: 0.06s; }
+.anim-delay-2  { animation-delay: 0.12s; }
+.anim-delay-3  { animation-delay: 0.18s; }
+.anim-delay-4  { animation-delay: 0.24s; }
+.anim-delay-5  { animation-delay: 0.30s; }
+
+@media print {
+  body { background: white !important; color: black !important; font-size: 12pt; }
+  .no-print { display: none !important; }
+  .print-card { break-inside: avoid; border: 1px solid #ccc !important; padding: 16pt !important; }
+}
