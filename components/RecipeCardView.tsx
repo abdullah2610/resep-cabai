@@ -2,12 +2,8 @@
 
 import { useState } from 'react'
 import type { RecipeCard } from '@/types'
-import { copyCardText, priorityColor, priorityBg } from '@/lib/data'
-import {
-  ChevronLeft, CheckSquare, FlaskConical, Sprout,
-  AlertTriangle, SplitSquareHorizontal, MapPin,
-  Share2, Printer, Copy, Check, ChevronDown, ChevronUp
-} from 'lucide-react'
+import { copyCardText, priorityColor } from '@/lib/data'
+import { ChevronLeft, Share2, Printer, Copy, Check } from 'lucide-react'
 
 interface Props {
   card: RecipeCard
@@ -17,51 +13,51 @@ interface Props {
   onReset: () => void
 }
 
-function Section({
-  icon, title, children, defaultOpen = true, accent
+const S = {
+  rust:   '#a83228',
+  forest: '#1f5132',
+  sky:    '#1d4a8c',
+  amber:  '#c87b00',
+  plum:   '#6c2d7a',
+}
+
+function SectionA({
+  stripe, num, title, badge, children,
 }: {
-  icon: React.ReactNode
+  stripe: string
+  num: string
   title: string
+  badge?: string
   children: React.ReactNode
-  defaultOpen?: boolean
-  accent?: string
 }) {
-  const [open, setOpen] = useState(defaultOpen)
   return (
-    <div style={{
-      background: 'rgba(255,255,255,0.03)',
-      border: '1px solid rgba(255,255,255,0.07)',
-      borderRadius: 'var(--radius-lg)',
-      overflow: 'hidden',
-      marginBottom: 10,
+    <section style={{
+      display: 'grid', gridTemplateColumns: '6px 1fr',
+      borderBottom: '1px solid var(--rule)',
     }}>
-      <button
-        onClick={() => setOpen(o => !o)}
-        style={{
-          width: '100%', display: 'flex', alignItems: 'center',
-          gap: 10, padding: '14px 16px',
-          background: 'none', border: 'none', cursor: 'pointer',
-          textAlign: 'left',
-        }}
-      >
-        <span style={{ color: accent ?? 'var(--lime)', flexShrink: 0 }}>{icon}</span>
-        <span style={{
-          flex: 1, fontFamily: 'var(--font-body)', fontWeight: 600,
-          fontSize: 13, color: 'var(--cream)', letterSpacing: '0.01em',
-          textTransform: 'uppercase',
-        }}>
-          {title}
-        </span>
-        <span style={{ color: 'rgba(247,243,234,0.35)', flexShrink: 0 }}>
-          {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </span>
-      </button>
-      {open && (
-        <div style={{ padding: '0 16px 16px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          {children}
+      <div style={{ background: stripe }} />
+      <div style={{ padding: '16px 16px 18px' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 12 }}>
+          <span style={{
+            fontFamily: 'var(--font-mono)', fontSize: 11,
+            color: stripe, fontWeight: 700,
+          }}>{num}</span>
+          <h2 style={{
+            fontFamily: 'var(--font-display)', fontWeight: 900,
+            fontSize: 17, color: 'var(--ink)', letterSpacing: '-0.01em', flex: 1,
+          }}>{title}</h2>
+          {badge && (
+            <span style={{
+              fontSize: 10, fontFamily: 'var(--font-mono)',
+              background: stripe, color: '#fff',
+              padding: '2px 7px', borderRadius: 3,
+              letterSpacing: '0.04em', textTransform: 'uppercase', fontWeight: 600,
+            }}>{badge}</span>
+          )}
         </div>
-      )}
-    </div>
+        {children}
+      </div>
+    </section>
   )
 }
 
@@ -86,328 +82,281 @@ export default function RecipeCardView({ card, phaseLabel, contextLabel, onBack,
   }
 
   const pColor = priorityColor(card.priority)
-  const pBg    = priorityBg(card.priority)
 
   return (
-    <div className="anim-fade-in print-card">
-      {/* Back button */}
-      <button
-        onClick={onBack}
-        className="no-print"
-        style={{
-          display: 'flex', alignItems: 'center', gap: 6,
-          background: 'none', border: 'none', cursor: 'pointer',
-          color: 'rgba(247,243,234,0.45)', fontSize: 13,
-          fontFamily: 'var(--font-body)', padding: 0,
-          marginBottom: 18, transition: 'color 0.15s',
-        }}
-        onMouseEnter={e => (e.currentTarget.style.color = 'var(--cream)')}
-        onMouseLeave={e => (e.currentTarget.style.color = 'rgba(247,243,234,0.45)')}
-      >
-        <ChevronLeft size={16} /> Pilih konteks lain
-      </button>
+    <div className="anim-fade-in print-card" style={{ margin: '0 -20px' }}>
 
-      {/* Card header */}
-      <div style={{
-        background: 'rgba(255,255,255,0.04)',
-        border: '1px solid rgba(255,255,255,0.09)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '18px 18px 16px',
-        marginBottom: 10,
+      {/* Sticky card header */}
+      <header style={{
+        position: 'sticky', top: 57, zIndex: 5,
+        background: 'var(--paper)',
+        borderBottom: '1px solid var(--rule)',
+        padding: '12px 16px 10px',
       }}>
-        {/* breadcrumb */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+          <button
+            onClick={onBack}
+            className="no-print"
+            style={{
+              border: 'none', background: 'none', color: 'var(--ink-soft)',
+              fontSize: 22, padding: '0 4px 0 0', lineHeight: 1, cursor: 'pointer',
+              display: 'flex', alignItems: 'center',
+            }}
+          >
+            <ChevronLeft size={20} />
+          </button>
           <span style={{
             fontFamily: 'var(--font-mono)', fontSize: 10,
-            color: 'var(--lime)', background: 'rgba(168,224,99,0.12)',
-            padding: '2px 8px', borderRadius: 10, letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-          }}>{phaseLabel}</span>
-          <span style={{ color: 'rgba(247,243,234,0.25)', fontSize: 12 }}>×</span>
+            color: 'var(--ink-faint)', letterSpacing: '0.1em', textTransform: 'uppercase',
+          }}>
+            {phaseLabel} · #{card.id}
+          </span>
+          <span style={{ flex: 1 }} />
           <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: 10,
-            color: 'rgba(247,243,234,0.6)', background: 'rgba(255,255,255,0.07)',
-            padding: '2px 8px', borderRadius: 10, letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-          }}>{contextLabel}</span>
+            background: pColor, color: '#fff',
+            fontSize: 10, fontFamily: 'var(--font-mono)', fontWeight: 700,
+            padding: '3px 8px', borderRadius: 3, letterSpacing: '0.08em',
+          }}>{card.priority}</span>
         </div>
-
-        <h2 style={{
-          fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 900,
-          color: 'var(--cream)', lineHeight: 1.2, marginBottom: 10,
+        <h1 style={{
+          fontFamily: 'var(--font-display)', fontWeight: 900,
+          fontSize: 21, lineHeight: 1.1, color: 'var(--ink)', letterSpacing: '-0.01em',
         }}>
-          {card.phase}<br />
-          <span style={{ color: 'rgba(247,243,234,0.55)', fontWeight: 700, fontSize: 18 }}>
-            {card.context}
-          </span>
-        </h2>
-
-        {/* Priority + ID row */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-          <span style={{
-            background: pBg, border: `1px solid ${pColor}`,
-            color: pColor, fontSize: 11, fontWeight: 700,
-            fontFamily: 'var(--font-mono)', padding: '3px 10px',
-            borderRadius: 10, letterSpacing: '0.05em',
-          }}>
-            {card.priority} — {card.priority_label}
-          </span>
-          <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: 10,
-            color: 'rgba(247,243,234,0.3)', letterSpacing: '0.04em',
-          }}>
-            #{card.id}
-          </span>
+          {card.phase}
+        </h1>
+        <div style={{ marginTop: 4, fontSize: 14, color: 'var(--ink-soft)', lineHeight: 1.3 }}>
+          dengan <strong style={{ color: 'var(--ink)' }}>{card.context.toLowerCase()}</strong>
         </div>
+      </header>
 
-        {/* See also */}
+      {/* Priority strip */}
+      <div style={{
+        background: 'var(--rust-bg)', color: 'var(--rust)',
+        padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 8,
+        borderBottom: '1px solid var(--rule)',
+        fontSize: 12, fontWeight: 600,
+      }}>
+        <span>⚠ Prioritas {card.priority_label}</span>
         {card.see_also && (
-          <div style={{
-            marginTop: 12, padding: '8px 12px',
-            background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)',
-            borderRadius: 8, fontSize: 12, color: 'rgba(147,197,253,0.9)',
-            fontFamily: 'var(--font-body)',
+          <span style={{
+            marginLeft: 'auto', fontSize: 11,
+            color: S.sky, fontStyle: 'italic', fontWeight: 400,
           }}>
-            📋 {card.see_also}
-          </div>
+            {card.see_also}
+          </span>
         )}
       </div>
 
-      {/* TINDAKAN */}
-      {card.actions.length > 0 && (
-        <Section icon={<CheckSquare size={16} />} title="Tindakan Hari Ini">
-          <ol style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10, paddingTop: 14 }}>
-            {card.actions.map((a, i) => (
-              <li key={i} className={`anim-slide-up anim-delay-${Math.min(i+1,5)}`}
-                style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                <span style={{
-                  width: 24, height: 24, borderRadius: '50%', flexShrink: 0,
-                  background: 'rgba(168,224,99,0.15)', border: '1px solid rgba(168,224,99,0.35)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--lime)',
-                  fontWeight: 700, marginTop: 1,
-                }}>
-                  {i + 1}
-                </span>
-                <span style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--cream)', fontFamily: 'var(--font-body)' }}>
-                  {a}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </Section>
-      )}
+      {/* Sections */}
+      <div style={{ paddingBottom: 16 }}>
 
-      {/* PUPUK */}
-      {card.fertilizer.items.length > 0 && (
-        <Section icon={<Sprout size={16} />} title="Resep Pupuk" accent="rgba(168,224,99,0.8)">
-          <div style={{ paddingTop: 14 }}>
-            <div style={{
-              background: 'rgba(168,224,99,0.05)',
-              border: '1px solid rgba(168,224,99,0.15)',
-              borderRadius: 10, overflow: 'hidden', marginBottom: 10,
-            }}>
-              {card.fertilizer.items.map((item, i) => (
-                <div key={i} style={{
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
-                  padding: '10px 14px', gap: 12,
-                  borderBottom: i < card.fertilizer.items.length - 1
-                    ? '1px solid rgba(168,224,99,0.1)' : 'none',
-                }}>
-                  <span style={{ fontSize: 13, color: 'rgba(247,243,234,0.7)', fontFamily: 'var(--font-body)', lineHeight: 1.4 }}>
-                    {item.bahan}
-                  </span>
+        {card.actions.length > 0 && (
+          <SectionA stripe={S.rust} num="01" title="Tindakan Hari Ini" badge={`${card.actions.length} langkah`}>
+            <ol style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {card.actions.map((a, i) => (
+                <li key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                   <span style={{
-                    fontSize: 13, fontWeight: 600, color: 'var(--lime)',
-                    fontFamily: 'var(--font-mono)', textAlign: 'right', flexShrink: 0,
-                    maxWidth: '55%', lineHeight: 1.4,
-                  }}>
-                    {item.dosis}
-                  </span>
-                </div>
+                    width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
+                    background: 'var(--ink)', color: 'var(--paper)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700,
+                  }}>{i + 1}</span>
+                  <span style={{ fontSize: 15, lineHeight: 1.45, color: 'var(--ink)', paddingTop: 4 }}>{a}</span>
+                </li>
               ))}
-            </div>
-            {card.fertilizer.notes && (
-              <p style={{ fontSize: 13, color: 'rgba(247,243,234,0.55)', lineHeight: 1.6, fontFamily: 'var(--font-body)' }}>
-                📌 {card.fertilizer.notes}
-              </p>
-            )}
-          </div>
-        </Section>
-      )}
+            </ol>
+          </SectionA>
+        )}
 
-      {/* PESTISIDA */}
-      {card.pesticide.steps.length > 0 && (
-        <Section icon={<FlaskConical size={16} />} title="Pestisida W-A-L-E" accent="rgba(147,197,253,0.8)">
-          <div style={{ paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {card.pesticide.steps.map((step, i) => (
-              <div key={i} style={{
-                background: 'rgba(59,130,246,0.06)',
-                border: '1px solid rgba(59,130,246,0.15)',
-                borderRadius: 10, padding: '10px 14px',
+        {card.fertilizer.items.length > 0 && (
+          <SectionA stripe={S.forest} num="02" title="Resep Pupuk">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14, marginBottom: card.fertilizer.notes ? 12 : 0 }}>
+              <tbody>
+                {card.fertilizer.items.map((it, i) => (
+                  <tr key={i} style={{ borderBottom: '1px dashed var(--rule)' }}>
+                    <td style={{ padding: '10px 0', verticalAlign: 'top' }}>
+                      <div style={{ fontWeight: 600, color: 'var(--ink)' }}>{it.bahan}</div>
+                    </td>
+                    <td style={{
+                      padding: '10px 0 10px 12px', textAlign: 'right', verticalAlign: 'top',
+                      fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600,
+                      color: S.forest, whiteSpace: 'nowrap',
+                    }}>{it.dosis}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {card.fertilizer.notes && (
+              <div style={{
+                background: 'var(--paper-alt)', padding: '10px 12px', borderRadius: 6,
+                fontSize: 13, lineHeight: 1.5, color: 'var(--ink-soft)',
               }}>
-                <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'rgba(147,197,253,0.7)', letterSpacing: '0.05em', marginBottom: 4, textTransform: 'uppercase' }}>
-                  {step.langkah}
-                </div>
-                <div style={{ fontSize: 13, lineHeight: 1.5, color: 'var(--cream)', fontFamily: 'var(--font-body)' }}>
-                  {step.detail}
+                <strong style={{ color: 'var(--ink)' }}>Catatan.</strong> {card.fertilizer.notes}
+              </div>
+            )}
+          </SectionA>
+        )}
+
+        {card.pesticide.steps.length > 0 && (
+          <SectionA stripe={S.sky} num="03" title="Pestisida W-A-L-E">
+            {card.pesticide.steps.map((s, i) => (
+              <div key={i} style={{
+                display: 'grid', gridTemplateColumns: '32px 1fr',
+                gap: 12, padding: '10px 0',
+                borderBottom: i < card.pesticide.steps.length - 1 ? '1px solid var(--rule)' : 'none',
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: 6,
+                  background: S.sky, color: '#fff',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 700,
+                }}>{s.langkah.charAt(0)}</div>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{s.langkah}</div>
+                  <div style={{ fontSize: 13, color: 'var(--ink-soft)', lineHeight: 1.4, marginTop: 2 }}>{s.detail}</div>
                 </div>
               </div>
             ))}
             {card.pesticide.notes && (
               <div style={{
-                background: 'rgba(59,130,246,0.08)',
-                border: '1px solid rgba(59,130,246,0.2)',
-                borderRadius: 10, padding: '10px 14px',
-                fontSize: 13, color: 'rgba(147,197,253,0.85)', lineHeight: 1.6,
-                fontFamily: 'var(--font-body)',
+                marginTop: 12, padding: '10px 12px',
+                background: 'var(--sky-bg)', borderRadius: 6,
+                fontSize: 12, lineHeight: 1.5, color: S.sky,
               }}>
-                📋 {card.pesticide.notes}
+                {card.pesticide.notes}
               </div>
             )}
-          </div>
-        </Section>
-      )}
+          </SectionA>
+        )}
 
-      {/* PERINGATAN */}
-      {card.warnings.length > 0 && (
-        <Section
-          icon={<AlertTriangle size={16} />}
-          title="Peringatan"
-          accent="rgba(245,166,35,0.9)"
-        >
-          <div style={{ paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {card.warnings.map((w, i) => (
-              <div key={i} style={{
-                display: 'flex', gap: 10, alignItems: 'flex-start',
-                background: 'rgba(245,166,35,0.07)',
-                border: '1px solid rgba(245,166,35,0.2)',
-                borderRadius: 10, padding: '10px 14px',
-              }}>
-                <AlertTriangle size={14} style={{ color: 'var(--amber)', flexShrink: 0, marginTop: 3 }} />
-                <span style={{ fontSize: 13, lineHeight: 1.55, color: 'rgba(247,243,234,0.85)', fontFamily: 'var(--font-body)' }}>
-                  {w}
-                </span>
-              </div>
-            ))}
-          </div>
-        </Section>
-      )}
+        {card.warnings.length > 0 && (
+          <SectionA stripe={S.amber} num="04" title="Peringatan">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {card.warnings.map((w, i) => (
+                <div key={i} style={{
+                  display: 'flex', gap: 10, padding: '8px 12px',
+                  background: 'var(--amber-bg)', borderRadius: 6,
+                  fontSize: 13, lineHeight: 1.45, color: '#5d3700',
+                  borderLeft: `3px solid ${S.amber}`,
+                }}>
+                  <span style={{ flexShrink: 0, color: S.amber, fontWeight: 700 }}>⚠</span>
+                  <span>{w}</span>
+                </div>
+              ))}
+            </div>
+          </SectionA>
+        )}
 
-      {/* DIFERENSIASI */}
-      {card.differential.length > 0 && (
-        <Section
-          icon={<SplitSquareHorizontal size={16} />}
-          title="Diferensiasi Diagnosis"
-          defaultOpen={false}
-          accent="rgba(192,132,252,0.8)"
-        >
-          <div style={{ paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {card.differential.length > 0 && (
+          <SectionA stripe={S.plum} num="05" title="Diferensiasi Diagnosis">
             {card.differential.map((d, i) => (
               <div key={i} style={{
-                background: 'rgba(192,132,252,0.05)',
-                border: '1px solid rgba(192,132,252,0.15)',
-                borderRadius: 10, padding: '10px 14px',
+                padding: '10px 0',
+                borderBottom: i < card.differential.length - 1 ? '1px dashed var(--rule)' : 'none',
               }}>
-                <div style={{ fontSize: 12, fontWeight: 600, color: 'rgba(216,180,254,0.8)', fontFamily: 'var(--font-body)', marginBottom: 4 }}>
-                  {d.label}
-                </div>
-                <div style={{ fontSize: 13, lineHeight: 1.55, color: 'rgba(247,243,234,0.75)', fontFamily: 'var(--font-body)' }}>
-                  {d.penjelasan}
-                </div>
+                <div style={{
+                  fontSize: 13, fontWeight: 700, color: S.plum,
+                  fontStyle: 'italic', fontFamily: 'var(--font-display)',
+                }}>{d.label}</div>
+                <div style={{ fontSize: 13, color: 'var(--ink-soft)', lineHeight: 1.5, marginTop: 4 }}>{d.penjelasan}</div>
               </div>
             ))}
-          </div>
-        </Section>
-      )}
+          </SectionA>
+        )}
 
-      {/* CATATAN LOKAL */}
-      {card.local_notes.length > 0 && (
-        <Section
-          icon={<MapPin size={16} />}
-          title="Catatan Lokal Kalbar"
-          defaultOpen={false}
-          accent="rgba(52,211,153,0.8)"
-        >
-          <div style={{ paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {card.local_notes.length > 0 && (
+          <SectionA stripe={S.forest} num="06" title="Catatan Kalbar">
             {card.local_notes.map((n, i) => (
               <div key={i} style={{
-                background: 'rgba(52,211,153,0.05)',
-                border: '1px solid rgba(52,211,153,0.15)',
-                borderRadius: 10, padding: '10px 14px',
+                padding: '8px 0',
+                borderBottom: i < card.local_notes.length - 1 ? '1px dashed var(--rule)' : 'none',
               }}>
-                <div style={{ fontSize: 12, fontWeight: 600, color: 'rgba(110,231,183,0.8)', fontFamily: 'var(--font-body)', marginBottom: 4 }}>
-                  📍 {n.label}
-                </div>
-                <div style={{ fontSize: 13, lineHeight: 1.55, color: 'rgba(247,243,234,0.75)', fontFamily: 'var(--font-body)' }}>
-                  {n.catatan}
-                </div>
+                <div style={{
+                  fontSize: 12, fontFamily: 'var(--font-mono)',
+                  color: S.forest, letterSpacing: '0.04em',
+                  textTransform: 'uppercase', marginBottom: 3,
+                }}>📍 {n.label}</div>
+                <div style={{ fontSize: 13, color: 'var(--ink-soft)', lineHeight: 1.5 }}>{n.catatan}</div>
               </div>
             ))}
-          </div>
-        </Section>
-      )}
+          </SectionA>
+        )}
+      </div>
 
-      {/* Action buttons */}
-      <div className="no-print" style={{
-        display: 'grid', gridTemplateColumns: '1fr 1fr 1fr',
-        gap: 8, marginTop: 16, marginBottom: 8,
-      }}>
+      {/* Sticky bottom action bar */}
+      <div
+        className="no-print"
+        style={{
+          position: 'sticky', bottom: 0,
+          background: 'var(--paper)', borderTop: '1px solid var(--rule)',
+          padding: '10px 16px',
+          display: 'flex', gap: 8,
+        }}
+      >
         <button
           onClick={handleShare}
-          style={actionBtnStyle('var(--lime)', 'var(--ink)')}
-          onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
-          onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+          style={{
+            flex: 1, background: 'var(--ink)', color: 'var(--paper)',
+            border: 'none', borderRadius: 8, padding: '12px',
+            fontSize: 14, fontWeight: 600, fontFamily: 'var(--font-body)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+            transition: 'opacity 0.15s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
         >
-          <Share2 size={15} />
-          <span>Bagikan</span>
+          <Share2 size={15} /> Bagikan
         </button>
         <button
           onClick={handleCopy}
-          style={actionBtnStyle('rgba(168,224,99,0.15)', 'var(--lime)', '1px solid rgba(168,224,99,0.35)')}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(168,224,99,0.25)'}
-          onMouseLeave={e => e.currentTarget.style.background = 'rgba(168,224,99,0.15)'}
+          style={{
+            background: 'transparent', color: 'var(--ink)',
+            border: '1px solid var(--rule)', borderRadius: 8,
+            padding: '12px 16px', fontSize: 14, fontWeight: 600,
+            fontFamily: 'var(--font-body)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+            transition: 'background 0.15s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = 'var(--paper-alt)')}
+          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
         >
           {copied ? <Check size={15} /> : <Copy size={15} />}
-          <span>{copied ? 'Tersalin!' : 'Salin'}</span>
+          {copied ? 'Tersalin!' : 'Salin'}
         </button>
         <button
           onClick={handlePrint}
-          style={actionBtnStyle('rgba(255,255,255,0.07)', 'rgba(247,243,234,0.7)', '1px solid rgba(255,255,255,0.1)')}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.12)'}
-          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.07)'}
+          style={{
+            background: 'transparent', color: 'var(--ink)',
+            border: '1px solid var(--rule)', borderRadius: 8,
+            padding: '12px 14px', fontSize: 14,
+            fontFamily: 'var(--font-body)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'background 0.15s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = 'var(--paper-alt)')}
+          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
         >
           <Printer size={15} />
-          <span>Cetak</span>
         </button>
       </div>
 
       {/* Reset */}
-      <button
-        onClick={onReset}
-        className="no-print"
-        style={{
-          width: '100%', padding: '12px',
-          background: 'none', border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: 'var(--radius-md)', cursor: 'pointer',
-          color: 'rgba(247,243,234,0.4)', fontSize: 13,
-          fontFamily: 'var(--font-body)', transition: 'all 0.15s',
-        }}
-        onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = 'rgba(247,243,234,0.7)' }}
-        onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = 'rgba(247,243,234,0.4)' }}
-      >
-        ↺ Mulai dari awal
-      </button>
+      <div className="no-print" style={{ padding: '12px 16px 24px', background: 'var(--paper)' }}>
+        <button
+          onClick={onReset}
+          style={{
+            width: '100%', padding: '12px',
+            background: 'none', border: '1px solid var(--rule)',
+            borderRadius: 'var(--radius-md)', cursor: 'pointer',
+            color: 'var(--ink-faint)', fontSize: 13,
+            fontFamily: 'var(--font-body)', transition: 'all 0.15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--ink-soft)'; e.currentTarget.style.color = 'var(--ink-soft)' }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--rule)'; e.currentTarget.style.color = 'var(--ink-faint)' }}
+        >
+          ↺ Mulai dari awal
+        </button>
+      </div>
     </div>
   )
-}
-
-function actionBtnStyle(bg: string, color: string, border?: string): React.CSSProperties {
-  return {
-    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-    padding: '12px 8px', borderRadius: 'var(--radius-md)',
-    background: bg, color, border: border ?? 'none',
-    fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)',
-    cursor: 'pointer', transition: 'all 0.15s',
-  }
 }

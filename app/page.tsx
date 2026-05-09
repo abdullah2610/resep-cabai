@@ -20,7 +20,6 @@ export default function Home() {
   const [loadingCard, setLoadingCard] = useState(false)
   const [error, setError]           = useState('')
 
-  // Load index on mount
   useEffect(() => {
     loadIndex().then(setIndex).catch(() => setError('Gagal memuat data. Periksa koneksi internet.'))
   }, [])
@@ -63,7 +62,7 @@ export default function Home() {
   return (
     <div style={{
       minHeight: '100dvh',
-      background: 'var(--forest)',
+      background: 'var(--paper)',
       display: 'flex',
       flexDirection: 'column',
     }}>
@@ -72,17 +71,19 @@ export default function Home() {
         padding: '16px 20px 0',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexShrink: 0,
+        background: 'var(--paper)',
+        position: 'sticky', top: 0, zIndex: 20,
       }}>
         <div>
           <div style={{
             fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 900,
-            color: 'var(--lime)', letterSpacing: '-0.01em', lineHeight: 1,
+            color: 'var(--forest)', letterSpacing: '-0.01em', lineHeight: 1,
           }}>
             🌶 Resep Cabai
           </div>
           <div style={{
             fontFamily: 'var(--font-mono)', fontSize: 10,
-            color: 'rgba(168,224,99,0.5)', letterSpacing: '0.08em',
+            color: 'var(--ink-faint)', letterSpacing: '0.08em',
             textTransform: 'uppercase', marginTop: 3,
           }}>
             per Fase · POPT Kalbar
@@ -94,13 +95,13 @@ export default function Home() {
             onClick={handleReset}
             style={{
               display: 'flex', alignItems: 'center', gap: 5,
-              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
+              background: 'var(--paper-alt)', border: '1px solid var(--rule)',
               borderRadius: 20, padding: '6px 12px', cursor: 'pointer',
-              color: 'rgba(247,243,234,0.55)', fontSize: 12,
+              color: 'var(--ink-soft)', fontSize: 12,
               fontFamily: 'var(--font-body)', transition: 'all 0.15s',
             }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
+            onMouseEnter={e => (e.currentTarget.style.background = '#e0d5bc')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'var(--paper-alt)')}
           >
             <RefreshCw size={12} /> Ulang
           </button>
@@ -108,21 +109,21 @@ export default function Home() {
       </header>
 
       {/* Horizontal rule */}
-      <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', margin: '14px 0 0' }} />
+      <div style={{ height: 1, background: 'var(--rule)', margin: '14px 0 0' }} />
 
       {/* BRMP Kalbar banner */}
       <div style={{
         padding: '6px 20px',
-        background: 'rgba(52,211,153,0.06)',
-        borderBottom: '1px solid rgba(52,211,153,0.12)',
+        background: 'rgba(31,81,50,0.06)',
+        borderBottom: '1px solid rgba(31,81,50,0.15)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
       }}>
         <span style={{
           fontFamily: 'var(--font-mono)', fontSize: 10,
-          color: 'rgba(110,231,183,0.65)', letterSpacing: '0.07em',
-          textTransform: 'uppercase',
+          color: 'var(--forest)', letterSpacing: '0.07em',
+          textTransform: 'uppercase', opacity: 0.8,
         }}>
-          🏛 Balai Riset dan Modernisasi Pertanian Kalimantan Barat
+          🏛 Balai Besar Penerapan Modernisasi Pertanian Kalimantan Barat
         </span>
       </div>
 
@@ -132,24 +133,19 @@ export default function Home() {
         maxWidth: 520, width: '100%', margin: '0 auto',
         display: 'flex', flexDirection: 'column',
       }}>
-        {/* Error */}
         {error && (
           <div style={{
-            background: 'rgba(220,38,38,0.1)', border: '1px solid rgba(220,38,38,0.3)',
+            background: 'var(--rust-bg)', border: '1px solid rgba(168,50,40,0.3)',
             borderRadius: 10, padding: '12px 14px', marginBottom: 16,
-            fontSize: 13, color: '#fca5a5', fontFamily: 'var(--font-body)',
+            fontSize: 13, color: 'var(--rust)', fontFamily: 'var(--font-body)',
           }}>
             ⚠ {error}
           </div>
         )}
 
-        {/* Loading index */}
         {!index && !error && <LoadingSkeleton />}
-
-        {/* Loading card */}
         {loadingCard && <LoadingSkeleton />}
 
-        {/* Screens */}
         {index && !loadingCard && (
           <>
             {screen === 'phase' && (
@@ -184,19 +180,20 @@ export default function Home() {
       {/* Footer */}
       <footer style={{
         padding: '12px 20px',
-        borderTop: '1px solid rgba(255,255,255,0.05)',
+        borderTop: '1px solid var(--rule)',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexShrink: 0,
+        background: 'var(--paper)',
       }}>
         <span style={{
           fontFamily: 'var(--font-mono)', fontSize: 10,
-          color: 'rgba(247,243,234,0.2)', letterSpacing: '0.05em',
+          color: 'var(--ink-faint)', letterSpacing: '0.05em',
         }}>
           v1.0 · {index?.meta.total_cards ?? '—'} kartu resep
         </span>
         <span style={{
           fontFamily: 'var(--font-mono)', fontSize: 10,
-          color: 'rgba(247,243,234,0.2)', letterSpacing: '0.05em',
+          color: 'var(--ink-faint)', letterSpacing: '0.05em',
         }}>
           POPT · Kementan
         </span>

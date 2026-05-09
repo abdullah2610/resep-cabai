@@ -1,18 +1,15 @@
 'use client'
 
 import type { PhaseInfo } from '@/types'
-import {
-  Sprout, Flower2, ShoppingBasket,
-  TrendingDown, Leaf, Loader2
-} from 'lucide-react'
+import { Sprout, Flower2, ShoppingBasket, TrendingDown, Leaf } from 'lucide-react'
 
 const ICONS: Record<string, React.ReactNode> = {
-  'seeding':         <Sprout size={28} />,
-  'plant-2':         <Sprout size={28} />,
-  'flower':          <Flower2 size={28} />,
-  'basket':          <ShoppingBasket size={28} />,
-  'trending-down':   <TrendingDown size={28} />,
-  'leaf-off':        <Leaf size={28} />,
+  'seeding':         <Sprout size={26} />,
+  'plant-2':         <Sprout size={26} />,
+  'flower':          <Flower2 size={26} />,
+  'basket':          <ShoppingBasket size={26} />,
+  'trending-down':   <TrendingDown size={26} />,
+  'leaf-off':        <Leaf size={26} />,
 }
 
 const PHASE_DAYS: Record<string, string> = {
@@ -27,28 +24,27 @@ const PHASE_DAYS: Record<string, string> = {
 interface Props {
   phases: PhaseInfo[]
   onSelect: (slug: string) => void
-  loading?: boolean
 }
 
-export default function PhaseSelector({ phases, onSelect, loading }: Props) {
+export default function PhaseSelector({ phases, onSelect }: Props) {
   return (
-    <div style={{ padding: '0 0 32px' }}>
+    <div style={{ paddingBottom: 32 }}>
       {/* Header */}
-      <div style={{ marginBottom: 28, textAlign: 'center' }}>
+      <div style={{ marginBottom: 24 }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
-          background: 'rgba(168,224,99,0.1)', border: '1px solid rgba(168,224,99,0.25)',
+          background: 'rgba(31,81,50,0.08)', border: '1px solid rgba(31,81,50,0.2)',
           borderRadius: 20, padding: '4px 14px', marginBottom: 16,
         }}>
-          <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--lime)', display: 'inline-block' }} />
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--lime)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+          <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--forest)', display: 'inline-block' }} />
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--forest)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
             Langkah 1 dari 2
           </span>
         </div>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 900, color: 'var(--cream)', lineHeight: 1.2 }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 26, fontWeight: 900, color: 'var(--ink)', lineHeight: 1.2 }}>
           Fase tanaman<br />saat ini?
         </h2>
-        <p style={{ marginTop: 8, fontSize: 14, color: 'rgba(247,243,234,0.5)', fontFamily: 'var(--font-body)' }}>
+        <p style={{ marginTop: 8, fontSize: 14, color: 'var(--ink-soft)', fontFamily: 'var(--font-body)' }}>
           Pilih berdasarkan umur atau kondisi tanaman
         </p>
       </div>
@@ -61,57 +57,37 @@ export default function PhaseSelector({ phases, onSelect, loading }: Props) {
             <button
               key={ph.slug}
               onClick={() => onSelect(ph.slug)}
-              disabled={loading}
               className={`anim-slide-up anim-delay-${Math.min(idx + 1, 5)}`}
               style={{
                 gridColumn: isMain ? '1 / -1' : undefined,
-                background: isMain
-                  ? 'linear-gradient(135deg, rgba(168,224,99,0.18) 0%, rgba(168,224,99,0.06) 100%)'
-                  : 'rgba(255,255,255,0.04)',
-                border: isMain
-                  ? '1.5px solid rgba(168,224,99,0.45)'
-                  : '1px solid rgba(255,255,255,0.08)',
+                background: isMain ? 'rgba(31,81,50,0.07)' : 'var(--paper-alt)',
+                border: isMain ? '1.5px solid rgba(31,81,50,0.35)' : '1px solid var(--rule)',
                 borderRadius: 'var(--radius-lg)',
                 padding: isMain ? '18px 20px' : '16px 14px',
-                cursor: loading ? 'wait' : 'pointer',
+                cursor: 'pointer',
                 textAlign: 'left',
                 display: 'flex',
                 alignItems: isMain ? 'center' : 'flex-start',
                 gap: 14,
                 transition: 'all 0.18s ease',
-                position: 'relative',
-                overflow: 'hidden',
               }}
               onMouseEnter={e => {
-                const el = e.currentTarget
-                el.style.background = isMain
-                  ? 'linear-gradient(135deg, rgba(168,224,99,0.28) 0%, rgba(168,224,99,0.12) 100%)'
-                  : 'rgba(255,255,255,0.08)'
-                el.style.transform = 'translateY(-1px)'
+                e.currentTarget.style.background = isMain ? 'rgba(31,81,50,0.13)' : '#e3d9c4'
+                e.currentTarget.style.transform = 'translateY(-1px)'
               }}
               onMouseLeave={e => {
-                const el = e.currentTarget
-                el.style.background = isMain
-                  ? 'linear-gradient(135deg, rgba(168,224,99,0.18) 0%, rgba(168,224,99,0.06) 100%)'
-                  : 'rgba(255,255,255,0.04)'
-                el.style.transform = 'translateY(0)'
+                e.currentTarget.style.background = isMain ? 'rgba(31,81,50,0.07)' : 'var(--paper-alt)'
+                e.currentTarget.style.transform = 'translateY(0)'
               }}
             >
-              {/* Icon */}
-              <div style={{
-                color: isMain ? 'var(--lime)' : 'rgba(168,224,99,0.6)',
-                flexShrink: 0,
-                marginTop: isMain ? 0 : 2,
-              }}>
+              <div style={{ color: 'var(--forest)', flexShrink: 0, marginTop: isMain ? 0 : 2 }}>
                 {ICONS[ph.icon] ?? <Sprout size={24} />}
               </div>
-
-              {/* Text */}
               <div style={{ flex: 1 }}>
                 <div style={{
                   fontSize: isMain ? 15 : 14,
                   fontWeight: 600,
-                  color: isMain ? 'var(--lime)' : 'var(--cream)',
+                  color: 'var(--ink)',
                   lineHeight: 1.3,
                   fontFamily: 'var(--font-body)',
                 }}>
@@ -119,7 +95,7 @@ export default function PhaseSelector({ phases, onSelect, loading }: Props) {
                 </div>
                 <div style={{
                   fontSize: 11,
-                  color: isMain ? 'rgba(168,224,99,0.7)' : 'rgba(247,243,234,0.4)',
+                  color: 'var(--ink-faint)',
                   marginTop: 3,
                   fontFamily: 'var(--font-mono)',
                   letterSpacing: '0.03em',
@@ -127,22 +103,14 @@ export default function PhaseSelector({ phases, onSelect, loading }: Props) {
                   {PHASE_DAYS[ph.slug] ?? ''}
                 </div>
               </div>
-
-              {/* Badge for main card */}
               {isMain && (
                 <div style={{
-                  background: 'var(--lime)', color: 'var(--ink)',
+                  background: 'var(--forest)', color: '#fff',
                   fontSize: 10, fontWeight: 700, fontFamily: 'var(--font-mono)',
                   padding: '3px 9px', borderRadius: 10, flexShrink: 0,
                   letterSpacing: '0.05em', textTransform: 'uppercase',
                 }}>
                   UTAMA
-                </div>
-              )}
-
-              {loading && (
-                <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 'var(--radius-lg)' }}>
-                  <Loader2 size={20} style={{ color: 'var(--lime)', animation: 'spin 1s linear infinite' }} />
                 </div>
               )}
             </button>
