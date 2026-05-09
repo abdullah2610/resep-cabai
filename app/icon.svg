@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="7" fill="#1f5132"/>
+  <!-- Chili body -->
+  <path d="M16 8 Q22 9 22 16 Q22 24 16 27 Q10 24 10 16 Q10 9 16 8Z" fill="#c0392b"/>
+  <!-- Highlight -->
+  <ellipse cx="13.5" cy="15" rx="1.5" ry="4" fill="rgba(255,255,255,0.18)"/>
+  <!-- Stem -->
+  <rect x="15" y="3" width="2.5" height="6" rx="1.2" fill="#a8e063"/>
+  <!-- Leaf curl -->
+  <path d="M17.5 5 Q21 4 21 7 Q19 7 17.5 6" fill="#a8e063"/>
+</svg>

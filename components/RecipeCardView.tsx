@@ -170,22 +170,25 @@ export default function RecipeCardView({ card, phaseLabel, contextLabel, onBack,
 
         {card.fertilizer.items.length > 0 && (
           <SectionA stripe={S.forest} num="02" title="Resep Pupuk">
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14, marginBottom: card.fertilizer.notes ? 12 : 0 }}>
-              <tbody>
-                {card.fertilizer.items.map((it, i) => (
-                  <tr key={i} style={{ borderBottom: '1px dashed var(--rule)' }}>
-                    <td style={{ padding: '10px 0', verticalAlign: 'top' }}>
-                      <div style={{ fontWeight: 600, color: 'var(--ink)' }}>{it.bahan}</div>
-                    </td>
-                    <td style={{
-                      padding: '10px 0 10px 12px', textAlign: 'right', verticalAlign: 'top',
-                      fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600,
-                      color: S.forest, whiteSpace: 'nowrap',
-                    }}>{it.dosis}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div style={{ marginBottom: card.fertilizer.notes ? 12 : 0 }}>
+              {card.fertilizer.items.map((it, i) => (
+                <div key={i} style={{
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
+                  gap: 12, padding: '10px 0',
+                  borderBottom: '1px dashed var(--rule)',
+                }}>
+                  <div style={{
+                    fontWeight: 600, color: 'var(--ink)', fontSize: 14,
+                    flex: '1 1 0', minWidth: 0, wordBreak: 'break-word',
+                  }}>{it.bahan}</div>
+                  <div style={{
+                    fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600,
+                    color: S.forest, textAlign: 'right',
+                    flex: '0 0 auto', maxWidth: '50%', wordBreak: 'break-word',
+                  }}>{it.dosis}</div>
+                </div>
+              ))}
+            </div>
             {card.fertilizer.notes && (
               <div style={{
                 background: 'var(--paper-alt)', padding: '10px 12px', borderRadius: 6,
