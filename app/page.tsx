@@ -7,6 +7,7 @@ import PhaseSelector from '@/components/PhaseSelector'
 import ContextSelector from '@/components/ContextSelector'
 import RecipeCardView from '@/components/RecipeCardView'
 import LoadingSkeleton from '@/components/LoadingSkeleton'
+import FeedbackSection from '@/components/FeedbackSection'
 import { RefreshCw } from 'lucide-react'
 
 type Screen = 'phase' | 'context' | 'card'
@@ -149,10 +150,13 @@ export default function Home() {
         {index && !loadingCard && (
           <>
             {screen === 'phase' && (
-              <PhaseSelector
-                phases={index.meta.phases}
-                onSelect={handlePhaseSelect}
-              />
+              <>
+                <PhaseSelector
+                  phases={index.meta.phases}
+                  onSelect={handlePhaseSelect}
+                />
+                <FeedbackSection />
+              </>
             )}
 
             {screen === 'context' && selectedPhaseInfo && (
