@@ -7,7 +7,7 @@ import PhaseSelector from '@/components/PhaseSelector'
 import ContextSelector from '@/components/ContextSelector'
 import RecipeCardView from '@/components/RecipeCardView'
 import LoadingSkeleton from '@/components/LoadingSkeleton'
-import FeedbackSection from '@/components/FeedbackSection'
+import Link from 'next/link'
 import { RefreshCw } from 'lucide-react'
 
 type Screen = 'phase' | 'context' | 'card'
@@ -155,7 +155,18 @@ export default function Home() {
                   phases={index.meta.phases}
                   onSelect={handlePhaseSelect}
                 />
-                <FeedbackSection />
+                <p style={{
+                  marginTop: 28,
+                  textAlign: 'center',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 13,
+                  color: 'var(--ink-faint)',
+                }}>
+                  Punya masukan atau pertanyaan?{' '}
+                  <Link href="/masukan" style={{ color: 'var(--forest)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 2 }}>
+                    Beri tahu kami
+                  </Link>
+                </p>
               </>
             )}
 
